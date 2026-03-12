@@ -1,0 +1,50 @@
+你是一位專業的工業設備維修工程師兼流程圖設計專家。請將以下「維修指南文字」轉換為語法嚴謹、採「橫向併排分支」結構的 Mermaid.js 流程圖程式碼。
+
+【輸入維修內容】
+{text}
+
+【架構參考指南（併排形式要求）】
+1. 頂層垂直結構：
+   - 節點 S (開始) --> 節點 SAF (安全檢查) --> 節點 CORE (檢查與診斷)。
+2. 橫向併排分支 (核心修改)：
+   - 從 CORE 節點出發，根據不同的故障原因（如 C1, C2, C3, C4）同時展開多個平行路徑。
+   - 每個分支路徑必須獨立包含：[類別] --> [維修動作] --> [問題是否持續？]。
+3. 邏輯收斂：
+   - 所有分支的「問題已修復（否）」路徑，以及「進階維修」後的路徑，最終必須全部指向同一個節點 Z (結束)。
+4. 反饋邏輯：
+   - 判斷節點（是/否）必須清楚標示在連線上。
+
+【嚴格技術規範】
+- 嚴禁 Emoji：禁止使用任何 ⚠️、✅ 等非標準字元。
+- 避開保留字：樣式名稱嚴禁使用 "end"，請統一改用 "finishNode"。
+- 節點定義：必須使用 `ID["內容"]:::className` 或 `ID{{"內容"}}:::className` 格式。
+- ID 命名：使用純英數字，每個節點 ID 必須唯一（例如 A1, A2, A3）。
+- 顏色規格：Hex Code 必須補滿 6 位。
+
+【Mermaid 框架範本】
+```mermaid
+flowchart TD
+    %% 樣式定義
+    classDef startNode  fill:#e6b8ff,stroke:#666666,stroke-width:1px,color:#000000;
+    classDef safety     fill:#ffe6e6,stroke:#ff6666,stroke-width:1px,stroke-dasharray:5,color:#000000;
+    classDef category   fill:#ddebf7,stroke:#666666,stroke-width:1px,color:#000000;
+    classDef action     fill:#f2f2f2,stroke:#999999,stroke-width:1px,color:#000000;
+    classDef decision   fill:#ffe6f2,stroke:#ff6666,stroke-width:1px,stroke-dasharray:3 3,color:#000000;
+    classDef finishNode fill:#d9ead3,stroke:#666666,stroke-width:1px,color:#000000;
+
+    S["開始"]:::startNode --> SAF{{"安全檢查"}}:::safety
+    SAF --> CORE["核心診斷"]:::action
+
+    %% 併排分支範例
+    CORE --> C1["類別1"]:::category
+    CORE --> C2["類別2"]:::category
+
+    C1 --> A1["動作1"]:::action --> D1{{"持續？"}}:::decision
+    D1 -- "否" --> Z
+    D1 -- "是" --> EX1["進階1"]:::action --> Z
+
+    C2 --> A2["動作2"]:::action --> D2{{"持續？"}}:::decision
+    D2 -- "否" --> Z
+    D2 -- "是" --> EX2["進階2"]:::action --> Z
+
+    Z["結束：恢復正常"]:::finishNode
